@@ -1,0 +1,161 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #006400; /* Dark Green */
+    color: white;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-bottom: 5px solid #FFD700; /* Gold accent */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+.slogan {
+    margin: 0.5rem 0 0;
+    font-style: italic;
+    font-size: 1.2rem;
+}
+
+/* Main Content */
+main {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+section {
+    background-color: white;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #006400;
+    border-bottom: 2px solid #f4f4f4;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+}
+
+/* Products Section */
+.product-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.product-item {
+    text-align: center;
+    width: 280px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: transform 0.2s;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.product-item img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.product-item .price {
+    font-weight: bold;
+    color: #555;
+    font-size: 1.1rem;
+}
+
+.quantity-input {
+    width: 80px;
+    padding: 0.5rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Order Form Section */
+#customer-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+#customer-form input {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Important for padding */
+}
+
+.total-section {
+    text-align: center;
+    margin: 1.5rem 0;
+    font-size: 1.5rem;
+}
+
+#customer-form button {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+#pay-button {
+    background-color: #008000; /* M-Pesa Green */
+}
+
+#pay-button:hover {
+    background-color: #006400;
+}
+
+#whatsapp-button {
+    background-color: #25D366; /* WhatsApp Green */
+}
+
+#whatsapp-button:hover {
+    background-color: #128C7E;
+}
+
+#whatsapp-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #333;
+    color: white;
+    margin-top: 2rem;
+}
+
+
