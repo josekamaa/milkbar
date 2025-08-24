@@ -45,7 +45,7 @@ export default async function handler(req, res) {
             PartyA: formattedPhone,
             PartyB: shortcode,
             PhoneNumber: formattedPhone,
-            CallBackURL: `https://YOUR_VERCEL_URL/api/callback`, // IMPORTANT - See note below
+            CallBackURL: `https://milkbar-ten.vercel.app/api/callback`, // IMPORTANT - See note below
             AccountReference: "Gitwa Farm Milk",
             TransactionDesc: "Payment for milk products"
         }, {
