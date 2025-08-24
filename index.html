@@ -1,78 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gitwa Farm Milk Point</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M-Pesa Payment & WhatsApp Order</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    .product { margin-bottom: 10px; }
+    input { margin: 5px 0; padding: 8px; width: 250px; }
+    button { padding: 10px 20px; margin: 10px 0; cursor: pointer; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .total { font-weight: bold; margin: 15px 0; }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1>Gitwa Farm Milk Point</h1>
-        <p class="slogan">Maziwa kwa Afya</p>
-    </header>
+  <h1>Order Products</h1>
 
-    <main>
-        <section id="about">
-            <h2>Welcome to Gitwa Farm</h2>
-            <p>
-                Your one-stop shop for fresh and delicious dairy products. We are open every day from <strong>6:00 AM to 9:00 PM</strong>. Quality and health are our promise to you.
-            </p>
-        </section>
+  <div id="products"></div>
 
-        <section id="products">
-            <h2>Our Products</h2>
-            <div class="product-container">
-                <div class="product-item" data-name="Fresh Milk" data-price="70">
-                    <img src="https://i.imgur.com/8JWpXGz.png" alt="Fresh Milk in a glass jug">
-                    <h3>Fresh Milk</h3>
-                    <p class="price">KSh 70 / litre</p>
-                    <label for="milk-qty">Quantity:</label>
-                    <input type="number" id="milk-qty" class="quantity-input" min="0" value="0">
-                </div>
+  <div class="total">Total: Ksh <span id="total">0</span></div>
 
-                <div class="product-item" data-name="Cream Yoghurt" data-price="120">
-                    <img src="https://i.imgur.com/sC5pB3B.png" alt="Creamy yoghurt in a bowl">
-                    <h3>Cream Yoghurt</h3>
-                    <p class="price">KSh 120 / 500ml</p>
-                    <label for="yoghurt-qty">Quantity:</label>
-                    <input type="number" id="yoghurt-qty" class="quantity-input" min="0" value="0">
-                </div>
+  <input type="text" id="name" placeholder="Your Name"><br>
+  <input type="text" id="phone" placeholder="M-Pesa Phone (e.g., 0712345678)"><br>
 
-                <div class="product-item" data-name="Mala Milk" data-price="100">
-                    <img src="https://i.imgur.com/GzB9oZN.png" alt="Mala (fermented milk) in a glass">
-                    <h3>Mala (Fermented Milk)</h3>
-                    <p class="price">KSh 100 / 500ml</p>
-                    <label for="mala-qty">Quantity:</label>
-                    <input type="number" id="mala-qty" class="quantity-input" min="0" value="0">
-                </div>
-            </div>
-        </section>
+  <button id="payBtn">1. Pay with M-Pesa</button><br>
+  <button id="whatsappBtn" disabled>2. Send Order via WhatsApp</button>
 
-        <section id="order-form">
-            <h2>Complete Your Order</h2>
-            <form id="customer-form">
-                <label for="customer-name">Your Name:</label>
-                <input type="text" id="customer-name" placeholder="Enter your full name" required>
+  <script>
+    // Products list
+    const products = [
+      { id: 1, name: "Product A", price: 100 },
+      { id: 2, name: "Product B", price: 200 },
+      { id: 3, name: "Product C", price: 300 }
+    ];
 
-                <label for="customer-phone">M-Pesa Phone Number:</label>
-                <input type="tel" id="customer-phone" placeholder="e.g., 0712345678" required>
+    let cart = [];
+    let total = 0;
+    const productsDiv = document.getElementById("products");
+    const totalSpan = document.getElementById("total");
+    const payBtn = document.getElementById("payBtn");
+    const whatsappBtn = document.getElementById("whatsappBtn");
 
-                <div class="total-section">
-                    <h3>Total Price: KSh <span id="total-price">0</span></h3>
-                </div>
+    // Render products
+    products.forEach(product => {
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <label>
+          <input type="checkbox" value="${product.id}">
+          ${product.name} - Ksh ${product.price}
+        </label>
+      `;
+      productsDiv.appendChild(div);
+    });
 
-                <button type="button" id="pay-button">1. Pay with M-Pesa</button>
-                <button type="button" id="whatsapp-button" disabled>2. Send Order via WhatsApp</button>
-            </form>
-        </section>
-    </main>
+    // Update cart
+    productsDiv.addEventListener("change", (e) => {
+      const productId = parseInt(e.target.value);
+      const product = products.find(p => p.id === productId);
 
-    <footer>
-        <p>&copy; 2025 Gitwa Farm Milk Point. All Rights Reserved.</p>
-    </footer>
+      if (e.target.checked) {
+        cart.push(product);
+      } else {
+        cart = cart.filter(p => p.id !== productId);
+      }
 
-    <script src="script.js"></script>
+      total = cart.reduce((sum, p) => sum + p.price, 0);
+      totalSpan.textContent = total;
+    });
+
+    // Handle payment
+    payBtn.addEventListener("click", async () => {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      if (!name || !/^0[17]\d{8}$/.test(phone)) {
+        alert("Please enter a valid name and phone number (e.g., 0712345678 or 0112345678)");
+        return;
+      }
+
+      if (cart.length === 0) {
+        alert("Please select at least one product.");
+        return;
+      }
+
+      payBtn.disabled = true;
+      payBtn.textContent = "Processing Payment...";
+
+      try {
+        const res = await fetch("/api/stkpush", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: total, phone, name, cart })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert("Payment request sent. Check your M-Pesa phone.");
+          whatsappBtn.disabled = false; // enable WhatsApp after payment
+        } else {
+          alert("Payment failed: " + data.error);
+        }
+      } catch (error) {
+        alert("Error: " + error.message);
+      } finally {
+        payBtn.disabled = false;
+        payBtn.textContent = "1. Pay with M-Pesa";
+      }
+    });
+
+    // Handle WhatsApp order
+    whatsappBtn.addEventListener("click", () => {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      let message = `Order from ${name} (${phone})%0A%0A`;
+      cart.forEach(p => {
+        message += `- ${p.name} - Ksh ${p.price}%0A`;
+      });
+      message += `%0ATotal: Ksh ${total}`;
+
+      const whatsappUrl = `https://wa.me/254711391662?text=${message}`;
+      window.open(whatsappUrl, "_blank");
+    });
+  </script>
+
 </body>
 </html>
