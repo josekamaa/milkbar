@@ -8,6 +8,30 @@ export default async function handler(req, res) {
 
   const { phone, amount } = req.body;
 
+  // --- START: DATA VALIDATION & FORMATTING ---
+
+  // FIX 1: Format the phone number to 254...
+  let formattedPhone = phone;
+  if (formattedPhone.startsWith('0')) {
+    formattedPhone = '254' + formattedPhone.slice(1);
+  } else if (formattedPhone.startsWith('+')) {
+    formattedPhone = formattedPhone.slice(1);
+  }
+  
+  if (!/^(254)\d{9}$/.test(formattedPhone)) {
+      return res.status(400).json({ error: "Invalid phone number format. Must be 254..." });
+  }
+
+  // FIX 2: Round the amount to the nearest whole number (integer)
+  const roundedAmount = Math.round(amount);
+  
+  if (roundedAmount < 1) {
+      return res.status(400).json({ error: "Amount must be at least 1 KSH." });
+  }
+
+  // --- END: DATA VALIDATION & FORMATTING ---
+
+
   const shortcode = process.env.MPESA_SHORTCODE;
   const passkey = process.env.MPESA_PASSKEY;
   const consumerKey = process.env.MPESA_CONSUMER_KEY;
@@ -39,10 +63,10 @@ export default async function handler(req, res) {
         Password: password,
         Timestamp: timestamp,
         TransactionType: "CustomerPayBillOnline",
-        Amount: amount,
-        PartyA: phone,
+        Amount: roundedAmount,         // Use the formatted amount
+        PartyA: formattedPhone,        // Use the formatted phone number
         PartyB: shortcode,
-        PhoneNumber: phone,
+        PhoneNumber: formattedPhone,   // Use the formatted phone number
         CallBackURL: callbackUrl,
         AccountReference: "Gitwa Farm Milk",
         TransactionDesc: "Milk Purchase",
@@ -51,8 +75,14 @@ export default async function handler(req, res) {
     );
 
     res.status(200).json(stkResponse.data);
+
   } catch (error) {
-    console.error(error.response?.data || error.message);
-    res.status(500).json({ error: "Payment request failed" });
+    // FIX 3: Improved error feedback
+    // Send the actual error message from Safaricom back to the frontend
+    console.error("M-Pesa API Error:", error.response?.data || error.message);
+    res.status(500).json({ 
+        error: "Payment request failed", 
+        details: error.response?.data || { message: error.message }
+    });
   }
 }
