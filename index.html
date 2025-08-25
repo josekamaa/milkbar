@@ -1,131 +1,544 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>M-Pesa Payment & WhatsApp Order</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    .product { margin-bottom: 10px; }
-    input { margin: 5px 0; padding: 8px; width: 250px; }
-    button { padding: 10px 20px; margin: 10px 0; cursor: pointer; }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .total { font-weight: bold; margin: 15px 0; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gitwa Farm Milk Point - Maziwa kwa Afya</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4caf50;
+            --secondary: #ff9800;
+            --light: #f9f9f9;
+            --dark: #333;
+            --accent: #8bc34a;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+        }
+
+        .slogan {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-bar {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .open {
+            color: #e8f5e9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .hero {
+            background: url('https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            height: 400px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .hero-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-img {
+            height: 200px;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+
+        .product-content {
+            padding: 1.5rem;
+        }
+
+        .product-content h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-content .price {
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-content p {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .order-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .order-btn:hover {
+            background-color: var(--accent);
+        }
+
+        .order-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .order-form h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .calculation {
+            background-color: #f9f9f9;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        .calculation p {
+            margin-bottom: 0.5rem;
+        }
+
+        .mpesa-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .mpesa-btn:hover {
+            background-color: #0069d9;
+        }
+
+        .hours {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .hours h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .hours-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .hours-table tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        .hours-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .hours-table td {
+            padding: 0.8rem;
+        }
+
+        .hours-table td:last-child {
+            text-align: right;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info {
+            margin-bottom: 1rem;
+        }
+
+        .social-icons {
+            margin-bottom: 1rem;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 300px;
+            }
+            
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-cow"></i>
+            <h1>Gitwa Farm Milk Point</h1>
+        </div>
+        <div class="slogan">Maziwa kwa Afya</div>
+        <div class="status-bar">
+            <span class="open">Now Open</span>: 6:00 AM - 9:00 PM (Monday - Sunday)
+        </div>
+    </header>
 
-  <h1>Order Products</h1>
+    <div class="container">
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Fresh Dairy Products Daily</h2>
+                <p>Enjoy the finest quality milk, yogurt, and mala from our farm to your table</p>
+            </div>
+        </section>
 
-  <div id="products"></div>
+        <section class="products">
+            <div class="product-card">
+                <div class="product-img">
+                    <i class="fas fa-wine-bottle"></i>
+                </div>
+                <div class="product-content">
+                    <h3>Fresh Milk</h3>
+                    <div class="price">70 KSH per liter</div>
+                    <p>Our fresh milk is sourced directly from our farm, pasteurized and packaged for your health and enjoyment.</p>
+                    <button class="order-btn" data-product="Fresh Milk" data-price="70">Order Now</button>
+                </div>
+            </div>
 
-  <div class="total">Total: Ksh <span id="total">0</span></div>
+            <div class="product-card">
+                <div class="product-img">
+                    <i class="fas fa-mortar-pestle"></i>
+                </div>
+                <div class="product-content">
+                    <h3>Cream Yogurt</h3>
+                    <div class="price">120 KSH per container</div>
+                    <p>Creamy, delicious yogurt made from the finest milk. Rich in probiotics and essential nutrients.</p>
+                    <button class="order-btn" data-product="Cream Yogurt" data-price="120">Order Now</button>
+                </div>
+            </div>
 
-  <input type="text" id="name" placeholder="Your Name"><br>
-  <input type="text" id="phone" placeholder="M-Pesa Phone (e.g., 0712345678)"><br>
+            <div class="product-card">
+                <div class="product-img">
+                    <i class="fas fa-blender"></i>
+                </div>
+                <div class="product-content">
+                    <h3>Mala</h3>
+                    <div class="price">100 KSH per container</div>
+                    <p>Traditional fermented milk drink that is refreshing and packed with health benefits.</p>
+                    <button class="order-btn" data-product="Mala" data-price="100">Order Now</button>
+                </div>
+            </div>
+        </section>
 
-  <button id="payBtn">1. Pay with M-Pesa</button><br>
-  <button id="whatsappBtn" disabled>2. Send Order via WhatsApp</button>
+        <section class="order-form" id="orderForm">
+            <h2>Order <span id="selectedProduct"></span></h2>
+            <div class="form-group">
+                <label for="quantity">Quantity (liters/units):</label>
+                <input type="number" id="quantity" min="0.1" step="0.1" placeholder="Enter quantity" value="1">
+            </div>
+            <div class="form-group">
+                <label for="amount">Or Enter Amount (KSH):</label>
+                <input type="number" id="amount" min="10" step="10" placeholder="Enter amount in KSH">
+            </div>
+            
+            <div class="calculation">
+                <p>Price per unit: <span id="unitPrice">0</span> KSH</p>
+                <p>Quantity: <span id="calcQuantity">0</span></p>
+                <p>Total: <span id="totalAmount">0</span> KSH</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">M-Pesa Phone Number:</label>
+                <input type="tel" id="phone" placeholder="e.g., 07XX XXX XXX">
+            </div>
+            
+            <button class="mpesa-btn" id="payButton">Pay with M-Pesa</button>
+        </section>
 
-  <script>
-    // Products list
-    const products = [
-      { id: 1, name: "Product A", price: 100 },
-      { id: 2, name: "Product B", price: 200 },
-      { id: 3, name: "Product C", price: 300 }
-    ];
+        <section class="hours">
+            <h2>Opening Hours</h2>
+            <table class="hours-table">
+                <tr>
+                    <td>Monday - Friday</td>
+                    <td>6:00 AM - 9:00 PM</td>
+                </tr>
+                <tr>
+                    <td>Saturday</td>
+                    <td>6:00 AM - 9:00 PM</td>
+                </tr>
+                <tr>
+                    <td>Sunday</td>
+                    <td>6:00 AM - 9:00 PM</td>
+                </tr>
+            </table>
+        </section>
+    </div>
 
-    let cart = [];
-    let total = 0;
-    const productsDiv = document.getElementById("products");
-    const totalSpan = document.getElementById("total");
-    const payBtn = document.getElementById("payBtn");
-    const whatsappBtn = document.getElementById("whatsappBtn");
+    <footer>
+        <div class="contact-info">
+            <p>Visit us: Gitwa Farm, Along Dairy Road</p>
+            <p>Call: +254 7XX XXX XXX</p>
+            <p>Email: info@gitwafarm.com</p>
+        </div>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <p>&copy; 2023 Gitwa Farm Milk Point. All rights reserved.</p>
+    </footer>
 
-    // Render products
-    products.forEach(product => {
-      const div = document.createElement("div");
-      div.className = "product";
-      div.innerHTML = `
-        <label>
-          <input type="checkbox" value="${product.id}">
-          ${product.name} - Ksh ${product.price}
-        </label>
-      `;
-      productsDiv.appendChild(div);
-    });
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const orderButtons = document.querySelectorAll('.order-btn');
+            const orderForm = document.getElementById('orderForm');
+            const selectedProduct = document.getElementById('selectedProduct');
+            const unitPriceElement = document.getElementById('unitPrice');
+            const quantityInput = document.getElementById('quantity');
+            const amountInput = document.getElementById('amount');
+            const calcQuantityElement = document.getElementById('calcQuantity');
+            const totalAmountElement = document.getElementById('totalAmount');
+            const payButton = document.getElementById('payButton');
+            
+            let currentPrice = 0;
+            let currentProduct = '';
+            
+            // Set up order buttons
+            orderButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    currentProduct = this.getAttribute('data-product');
+                    currentPrice = parseFloat(this.getAttribute('data-price'));
+                    
+                    selectedProduct.textContent = currentProduct;
+                    unitPriceElement.textContent = currentPrice;
+                    
+                    // Reset form
+                    quantityInput.value = 1;
+                    amountInput.value = '';
+                    updateCalculation();
+                    
+                    // Show form
+                    orderForm.style.display = 'block';
+                    orderForm.scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            // Update calculation when quantity changes
+            quantityInput.addEventListener('input', function() {
+                if (this.value) {
+                    amountInput.value = '';
+                }
+                updateCalculation();
+            });
+            
+            // Update calculation when amount changes
+            amountInput.addEventListener('input', function() {
+                if (this.value) {
+                    quantityInput.value = '';
+                }
+                updateCalculation();
+            });
+            
+            // Calculate order total
+            function updateCalculation() {
+                let quantity = 0;
+                let total = 0;
+                
+                if (quantityInput.value) {
+                    quantity = parseFloat(quantityInput.value);
+                    total = quantity * currentPrice;
+                } else if (amountInput.value) {
+                    total = parseFloat(amountInput.value);
+                    quantity = total / currentPrice;
+                }
+                
+                calcQuantityElement.textContent = quantity.toFixed(2);
+                totalAmountElement.textContent = total.toFixed(2);
+            }
+            
+            payButton.addEventListener('click', async function() {
+    const phone = document.getElementById('phone').value;
+    const total = parseFloat(totalAmountElement.textContent);
 
-    // Update cart
-    productsDiv.addEventListener("change", (e) => {
-      const productId = parseInt(e.target.value);
-      const product = products.find(p => p.id === productId);
-
-      if (e.target.checked) {
-        cart.push(product);
-      } else {
-        cart = cart.filter(p => p.id !== productId);
-      }
-
-      total = cart.reduce((sum, p) => sum + p.price, 0);
-      totalSpan.textContent = total;
-    });
-
-    // Handle payment
-    payBtn.addEventListener("click", async () => {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-
-      if (!name || !/^0[17]\d{8}$/.test(phone)) {
-        alert("Please enter a valid name and phone number (e.g., 0712345678 or 0112345678)");
+    if (!phone || phone.length < 10) {
+        alert('Please enter a valid M-Pesa phone number');
         return;
-      }
+    }
 
-      if (cart.length === 0) {
-        alert("Please select at least one product.");
+    if (total < 10) {
+        alert('Please enter a valid order amount');
         return;
-      }
+    }
 
-      payBtn.disabled = true;
-      payBtn.textContent = "Processing Payment...";
+    this.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
+    this.disabled = true;
 
-      try {
-        const res = await fetch("/api/stkpush", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: total, phone, name, cart })
+    try {
+        const response = await fetch('/api/stkpush', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, amount: total })
         });
 
-        const data = await res.json();
-
-        if (res.ok) {
-          alert("Payment request sent. Check your M-Pesa phone.");
-          whatsappBtn.disabled = false; // enable WhatsApp after payment
+        const data = await response.json();
+        if (data.ResponseCode === "0") {
+            alert("Check your phone to complete payment via M-Pesa.");
         } else {
-          alert("Payment failed: " + data.error);
+            alert("Payment request failed: " + JSON.stringify(data));
         }
-      } catch (error) {
-        alert("Error: " + error.message);
-      } finally {
-        payBtn.disabled = false;
-        payBtn.textContent = "1. Pay with M-Pesa";
-      }
-    });
+    } catch (err) {
+        alert("Error processing payment.");
+        console.error(err);
+    }
 
-    // Handle WhatsApp order
-    whatsappBtn.addEventListener("click", () => {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
+    this.innerHTML = 'Pay with M-Pesa';
+    this.disabled = false;
+});
 
-      let message = `Order from ${name} (${phone})%0A%0A`;
-      cart.forEach(p => {
-        message += `- ${p.name} - Ksh ${p.price}%0A`;
-      });
-      message += `%0ATotal: Ksh ${total}`;
-
-      const whatsappUrl = `https://wa.me/254711391662?text=${message}`;
-      window.open(whatsappUrl, "_blank");
-    });
-  </script>
-
+            
+            // Initialize calculations
+            updateCalculation();
+        });
+    </script>
 </body>
-</html>
+  </html>
