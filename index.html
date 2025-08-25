@@ -496,7 +496,8 @@
                 totalAmountElement.textContent = total.toFixed(2);
             }
             
-            payButton.addEventListener('click', async function() {
+            
+payButton.addEventListener('click', async function() {
     const phone = document.getElementById('phone').value;
     const total = parseFloat(totalAmountElement.textContent);
 
@@ -521,19 +522,24 @@
         });
 
         const data = await response.json();
-        if (data.ResponseCode === "0") {
-            alert("Check your phone to complete payment via M-Pesa.");
+
+        if (data.error) {
+            // ✅ Show Safaricom error message from backend
+            alert("❌ Payment failed:\n" + JSON.stringify(data.details, null, 2));
+        } else if (data.ResponseCode === "0") {
+            alert("✅ Check your phone to complete payment via M-Pesa.");
         } else {
-            alert("Payment request failed: " + JSON.stringify(data));
+            alert("⚠️ Unexpected response:\n" + JSON.stringify(data, null, 2));
         }
     } catch (err) {
-        alert("Error processing payment.");
+        alert("🚨 Error contacting server: " + err.message);
         console.error(err);
     }
 
     this.innerHTML = 'Pay with M-Pesa';
     this.disabled = false;
 });
+
 
             
             // Initialize calculations
