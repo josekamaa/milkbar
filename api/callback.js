@@ -1,36 +1,18 @@
+// api/callback.js
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method Not Allowed" });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const callbackData = req.body;
-    console.log("M-Pesa Callback Data:", JSON.stringify(callbackData, null, 2));
+    const body = req.body; // should already be JSON
+    console.log("✅ M-Pesa Callback:", body);
 
-    const resultCode = callbackData.Body.stkCallback.ResultCode;
-    const resultDesc = callbackData.Body.stkCallback.ResultDesc;
-
-    if (resultCode === 0) {
-      const items = callbackData.Body.stkCallback.CallbackMetadata.Item;
-      const receipt = items.find(i => i.Name === "MpesaReceiptNumber")?.Value;
-      const amount = items.find(i => i.Name === "Amount")?.Value;
-      const phone = items.find(i => i.Name === "PhoneNumber")?.Value;
-
-      console.log("✅ Payment Success:", { receipt, amount, phone });
-      // TODO: Save into database (orders/payments)
-    } else {
-      console.log("❌ Payment Failed:", resultDesc);
-    }
-
-    return res.status(200).json({
-      ResultCode: 0,
-      ResultDesc: "Callback received successfully",
-    });
-  } catch (error) {
-    console.error("Callback Error:", error);
-    return res.status(500).json({
-      ResultCode: 1,
-      ResultDesc: "Callback handling failed",
-    });
+    // TODO: You could save this to a DB later (for now just log)
+    
+    res.status(200).json({ message: "Callback received successfully" });
+  } catch (err) {
+    console.error("❌ Error handling callback:", err);
+    res.status(500).json({ error: "Server error" });
   }
 }
